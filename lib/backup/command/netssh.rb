@@ -5,7 +5,7 @@
 Backup::Dependency.load('net-ssh')
 
 module Backup
-  module Commands
+  module Command
     class NetSSH < Base
 
       ##
@@ -41,8 +41,12 @@ module Backup
         end
       end
       
-    private
-
+      ##
+      # Adds a command to the @commands array
+      def add(command)
+        @commands << command
+      end
+      
       ##
       # Establishes a connection to the remote server and returns the Net::SSH object.
       # Not doing any instance variable caching because this object gets persisted in YAML
@@ -55,7 +59,7 @@ module Backup
 
       ##
       # If no block has been provided, it'll return the array of @directories.
-      # If a block has been provided, it'll evaluate it and add the defined paths to the @directories
+      # If a block has been provided, it'll evaluate it and add the given command to the @commands
       def commands(&block)
         unless block_given?
           return @commands.map do |command|
@@ -63,12 +67,6 @@ module Backup
           end.join("\s")
         end
         instance_eval(&block)
-      end
-
-      ##
-      # Adds a command to the @commands array
-      def add(command)
-        @commands << command
       end
       
       def run_command(command)
@@ -95,7 +93,6 @@ module Backup
         end
         channel.wait
       end
-      
     end
   end
 end

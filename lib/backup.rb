@@ -100,6 +100,10 @@ module Backup
       autoload :MongoDB,    File.join(CONFIGURATION_PATH, 'database', 'mongodb')
       autoload :Redis,      File.join(CONFIGURATION_PATH, 'database', 'redis')
     end
+    
+    module Command
+      autoload :NetSSH, File.join(CONFIGURATION_PATH, 'command', 'netssh')
+    end
   end
 
   ##
@@ -160,7 +164,7 @@ module Backup
   
   ##
   # Autoload commands files
-  module Commands
+  module Command
     autoload :Base,    File.join(COMMANDS_PATH, 'base')
     autoload :NetSSH,  File.join(COMMANDS_PATH, 'netssh')
   end
