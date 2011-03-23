@@ -22,6 +22,7 @@ module Backup
   ENCRYPTORS  = ['OpenSSL', 'GPG']
   SYNCERS     = ['RSync', 'S3']
   NOTIFIERS   = ['Mail', 'Twitter']
+  COMMANDS    = ['NetSSH']
 
   ##
   # Backup's internal paths
@@ -33,7 +34,8 @@ module Backup
   ENCRYPTOR_PATH     = File.join(LIBRARY_PATH, 'encryptor')
   NOTIFIER_PATH      = File.join(LIBRARY_PATH, 'notifier')
   SYNCER_PATH        = File.join(LIBRARY_PATH, 'syncer')
-
+  COMMANDS_PATH      = File.join(LIBRARY_PATH, 'command')
+  
   ##
   # Backup's Environment paths
   PATH               = File.join(ENV['HOME'], 'Backup')
@@ -155,11 +157,18 @@ module Backup
     autoload :Mail,    File.join(NOTIFIER_PATH, 'mail')
     autoload :Twitter, File.join(NOTIFIER_PATH, 'twitter')
   end
+  
+  ##
+  # Autoload commands files
+  module Commands
+    autoload :Base,    File.join(COMMANDS_PATH, 'base')
+    autoload :NetSSH,  File.join(COMMANDS_PATH, 'netssh')
+  end
 
   ##
   # Dynamically defines all the available database, storage, compressor, encryptor and notifier
   # classes inside Backup::Finder to improve the DSL for the configuration file
-  (DATABASES + STORAGES + COMPRESSORS + ENCRYPTORS + NOTIFIERS + SYNCERS).each do |constant|
+  (DATABASES + STORAGES + COMPRESSORS + ENCRYPTORS + NOTIFIERS + SYNCERS + COMMANDS).each do |constant|
     unless Backup::Finder.const_defined?(constant)
       Backup::Finder.const_set(constant, Class.new)
     end

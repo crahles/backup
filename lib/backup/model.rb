@@ -106,6 +106,7 @@ module Backup
       @storages    = Array.new
       @notifiers   = Array.new
       @syncers     = Array.new
+      @commands    = Array.new
 
       instance_eval(&block)
       Backup::Model.all << self
@@ -171,6 +172,15 @@ module Backup
         last_constant(syncer)
       ).new(&block)
     end
+    
+    ##
+    # Adds a syncer method to the array of syncer
+    # methods to use during the backup process
+    def run_command(command, &block)
+      @commands << Backup::Command.const_get(
+        last_constant(command)
+      ).new(&block)
+    end  
 
     ##
     # Performs the backup process
@@ -224,6 +234,7 @@ module Backup
         end
 
         syncers.each   { |s| s.perform!       }
+        commands.each  { |cmd| cmd.perform!   }
         notifiers.each { |n| n.perform!(self) }
       rescue Exception => exception
         clean!
