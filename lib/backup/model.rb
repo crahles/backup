@@ -180,7 +180,7 @@ module Backup
     ##
     # Adds a syncer method to the array of syncer
     # methods to use during the backup process
-    def run_command(command, &block)
+    def run_command_with(command, &block)
       @commands << Backup::Command.const_get(
         last_constant(command)
       ).new(&block)
