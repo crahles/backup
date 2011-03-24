@@ -74,8 +74,7 @@ module Backup
       # the event loop until the channel finishes (closes)
         channel = connection.open_channel do |ch|
           Logger.message("Sending command:")
-          Logger.message("#{command}")
-          Logger.message(" ")
+          Logger.message("-- #{command} --")
           ch.exec "#{command}" do |ch, success|
             raise "could not execute command" unless success
 
