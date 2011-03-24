@@ -73,6 +73,9 @@ module Backup
       # open a new channel and configure a minimal set of callbacks, then run
       # the event loop until the channel finishes (closes)
         channel = connection.open_channel do |ch|
+          Logger.message("Sending command:")
+          Logger.message("#{command}")
+          Logger.message(" ")
           ch.exec "#{command}" do |ch, success|
             raise "could not execute command" unless success
 

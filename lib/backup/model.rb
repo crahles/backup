@@ -40,6 +40,10 @@ module Backup
     ##
     # The syncers attribute holds an array of syncer objects
     attr_accessor :syncers
+    
+    ##
+    # The commands attribute holds an array of command objects
+    attr_accessor :commands
 
     ##
     # The time when the backup initiated (in format: 2011.02.20.03.29.59)
